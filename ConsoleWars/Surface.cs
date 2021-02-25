@@ -9,30 +9,40 @@ namespace ConsoleWars
 {
 	class Surface : ICloneable
 	{
-		string name;
-		int[] resistanceBonus = {1, 1, 1, 1, 1 };
-		int[] damageBonus = { 1, 1, 1, 1, 1 };
-		bool canHide;
-		bool blockVision;
-		Unit.Locomotion moveTypes = Unit.Locomotion.All;
-		int[] moveCost = { 1, 1, 1, 1, 1, 1};
-		Unit currentUnit = null;
+		protected string name;
+		protected bool canHide;
+		protected bool blockVision;
+		protected Unit.Locomotion moveTypes = Unit.Locomotion.All;
+		protected int[] moveCost = { 1, 1, 1, 1, 1, 1};
 
-		public int GetDamageBonus(Unit.DamageType damageType)
+		public AnimatedSprite AnimSprite { get; }
+		public Map ParentMap { get; }
+		public int DamageBonus = 0;
+		public int Defence { get; }
+		public Unit CurrentUnit { get; set; } = null;
+
+		public Surface(string name, AnimatedSprite animSprite, Map parentMap)
 		{
-			return damageBonus[(int)damageType];
+			this.name = name;
+			AnimSprite = animSprite;
+			ParentMap = parentMap;
 		}
-		public int GetResistanceBonus(Unit.DamageType damageType)
-		{
-			return resistanceBonus[(int)damageType];
-		}
+
 
 		public object Clone()
 		{
 			Surface newSurface = (Surface)MemberwiseClone();
-			newSurface.currentUnit = null;
+			newSurface.CurrentUnit = null;
 
 			return newSurface;
 		}
+
+		public void Draw(int x, int y)
+		{
+			AnimSprite.DrawAnimated(x, y, 1, 1);
+			if (CurrentUnit != null)
+				CurrentUnit.Draw(x, y);
+		}
+
 	}
 }

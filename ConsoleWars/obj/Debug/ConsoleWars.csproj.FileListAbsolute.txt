@@ -11,3 +11,10 @@ H:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csprojAssemblyRefe
 H:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csproj.CoreCompileInputs.cache
 H:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.exe
 H:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.pdb
+D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe.config
+D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe
+D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.pdb
+D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csprojAssemblyReference.cache
+D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csproj.CoreCompileInputs.cache
+D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.exe
+D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.pdb

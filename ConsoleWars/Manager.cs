@@ -12,19 +12,26 @@ namespace ConsoleWars
 	static class Manager
 	{
 		public static long elapsedTicks;
+		public static Dictionary<string, Unit> GlobalUnitList { get; } = new Dictionary<string, Unit>();
 		
 		public static void Update()
 		{
 			++elapsedTicks;
 		}
 
+		public static void LoadUnitListFromFolder()
+		{
+
+		}
+
 		public static class Graphics
 		{
-			public static Dictionary<string,Sprite> globalSpriteList = new Dictionary<string, Sprite>();
+			public static Dictionary<string, Sprite> GlobalSpriteList { get; } = new Dictionary<string, Sprite>();
+			public static Dictionary<string, AnimatedSprite> GlobalAnimSpriteList { get; } = new Dictionary<string, AnimatedSprite>();
 
 			public static void LoadSpritesFromFolder()
 			{
-				List<string> fileNames = Directory.GetFiles(Renderer.MainSpriteDirectory).ToList<string>();
+				List<string> fileNames = Directory.GetFiles(Renderer.MainSpriteDirectory).ToList();
 				fileNames.Sort();
 				
 
@@ -32,9 +39,17 @@ namespace ConsoleWars
 				{
 					if (fileNames[i].Contains(".spr"))
 					{
-						globalSpriteList.Add(fileNames[i], new Sprite(fileNames[i]));
+						fileNames[i] = fileNames[i].Replace(Renderer.MainSpriteDirectory + "\\", "");
+						Sprite newSprite = new Sprite(fileNames[i]);
+						newSprite.LoadSpriteFromFile();
+						GlobalSpriteList.Add(fileNames[i], newSprite);
 					}
 				}
+			}
+
+			public static void LoadAnimSpritesFromFolder()
+			{
+
 			}
 		}
 

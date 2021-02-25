@@ -30,8 +30,7 @@ namespace ConsoleWars
 
 			for (int i = 0; i < sprites.Length; ++i)
 			{
-				sprites[i] = new Sprite(spriteNames[i]);
-				sprites[i].LoadSpriteFromFile();
+				sprites[i] = Manager.Graphics.GlobalSpriteList[spriteNames[i]];
 			}
 		}
 

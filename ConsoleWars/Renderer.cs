@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsoleRender
 {
@@ -468,13 +469,15 @@ namespace ConsoleRender
 			}
 		}
 
-		public void Colorize(ConsoleColor colourA, ConsoleColor colourB)
+		public Sprite Colorize(ConsoleColor colourA, ConsoleColor colourB)
 		{
-			for (int i = 0; i < pixels.Length; ++i)
+			Sprite newSprite = Clone();
+			for (int i = 0; i < newSprite.pixels.Length; ++i)
 			{
-				if (pixels[i].bgCol == colourA)
-					pixels[i].bgCol = colourB;
+				if (newSprite.pixels[i].bgCol == colourA)
+					newSprite.pixels[i].bgCol = colourB;
 			}
+			return newSprite;
 		}
 
 		public struct Pixel

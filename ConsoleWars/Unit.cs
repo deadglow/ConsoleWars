@@ -10,12 +10,18 @@ namespace ConsoleWars
 
 	class Unit : ICloneable
 	{
-		Map parentMap;
-		Vector2 position = Vector2.Zero;
+		private Surface parentSurface;
+		public Surface ParentSurface { get; }
+
+		string name = "Unit";
 		Team team = Team.White;
+
+		AnimatedSprite sprite;
+
 		float hp = 10;
 		float maxHp = 10;
 		DamageType damageType;
+		float[] resistances = { 1, 1, 1, 1, 1 };
 		//Not the same as locomotion, dictates basically where (height and surface wise) the character is moving
 		MovementType movementType = MovementType.None;
 		float baseDamage = 1;
@@ -36,6 +42,27 @@ namespace ConsoleWars
 		float fuelUsageMod;
 		float visionMod;
 		float maxAttackRangeMod;
+
+		public Unit(string name, Surface parentSurface, AnimatedSprite sprite)
+		{
+			this.name = name;
+			this.parentSurface = parentSurface;
+			this.sprite = sprite;
+		}
+
+
+		public object Clone(Surface newParentSurface)
+		{
+			Unit newUnit = (Unit)MemberwiseClone();
+			newUnit.SetParentSurface(newParentSurface);
+
+			return newUnit;
+		}
+		public object Clone()
+		{
+			return Clone(null);
+		}
+
 
 		//=-------------------------------------|
 		//			Enums
@@ -75,24 +102,51 @@ namespace ConsoleWars
 		//			Methods
 		//_____________________________________/
 
-		public object Clone()
+		public void SetParentSurface(Surface newSurface)
 		{
-			Unit newUnit = (Unit)MemberwiseClone();
-			newUnit.parentMap = null;
+			//Checks first to see if not null
+			if (parentSurface != null)
+				parentSurface.CurrentUnit = null;
+			//Fixes dependencies on parent/child
+			if (parentSurface.CurrentUnit == this)
+				newSurface.CurrentUnit = this;
 
-			return newUnit;
+			parentSurface = newSurface;
 		}
-		
+
+		public bool MoveUnit(int newX, int newY)
+		{
+			//Checks to see if new coords are within map boundaries
+			if (newX >= 0 && newX < parentSurface.ParentMap.Width && newY >= 0 && newY < parentSurface.ParentMap.Height)
+			{
+				//Prevents moving unit to an occupied surface
+				if (parentSurface.ParentMap.GetSurface(newX, newY) != null)
+				{
+					//Assign parent surface to surface at newX, newY
+					SetParentSurface(parentSurface.ParentMap.GetSurface(newX, newY));
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		public float GetDamageTaken(float damage, DamageType damageType)
 		{
-			return damage * (hp / maxHp) * parentMap.GetSurface(position).GetResistanceBonus(damageType);
+			return (damage - parentSurface.Defence * resistances[(int)damageType] * (hp / maxHp) * resistances[(int)damageType]);
 		}
 
-		public float GetDamageDealt(bool firstTurnBonus)
+		public float GetDamageDealt(bool counterAttack)
 		{
-			float dam = baseDamage + (firstTurnBonus ? 1 : 0);
+			float dam = baseDamage  - (counterAttack ? 1 : 0) + parentSurface.DamageBonus;
 
-			return dam * hp / maxHp * parentMap.GetSurface(position).GetDamageBonus(damageType);
+			return dam * hp / maxHp;
 		}
+
+		public void Draw(int x, int y)
+		{
+			sprite.DrawAnimated(x, y, 1, 1);
+		}
+
 	}
 }
