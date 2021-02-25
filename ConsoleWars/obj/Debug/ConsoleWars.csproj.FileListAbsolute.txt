@@ -1,0 +1,13 @@
+D:\Codestuff\vs\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe.config
+D:\Codestuff\vs\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe
+D:\Codestuff\vs\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.pdb
+D:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csprojAssemblyReference.cache
+D:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.exe
+D:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.pdb
+H:\Codestuff\vs\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe.config
+H:\Codestuff\vs\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe
+H:\Codestuff\vs\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.pdb
+H:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csprojAssemblyReference.cache
+H:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csproj.CoreCompileInputs.cache
+H:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.exe
+H:\Codestuff\vs\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.pdb
