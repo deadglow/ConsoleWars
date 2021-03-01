@@ -45,12 +45,16 @@ namespace ConsoleWars
 		
 		public void Draw(int frame, int x, int y, int flipX, int flipY)
 		{
-			sprites[frame].DrawSprite(x, y, flipX, flipY);
+			sprites[frame].DrawSpriteToCamera(Camera.main, x, y, flipX, flipY);
 		}
 
 		public void DrawAnimated(int x, int y, int flipX, int flipY)
 		{
 			Draw((int)Math.Floor(Manager.elapsedTicks * Speed % sprites.Length), x, y, flipX, flipY);
+		}
+		public void DrawAnimated(Vector2 pos, int flipX, int flipY)
+		{
+			DrawAnimated((int)pos.x, (int)pos.y, flipX, flipY);
 		}
 
 	}

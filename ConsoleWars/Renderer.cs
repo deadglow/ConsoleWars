@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using ConsoleWars;
 
 namespace ConsoleRender
 {
@@ -304,8 +304,8 @@ namespace ConsoleRender
 			//------------------------------------------------------------------------------------------------/
 			public bool SetPixel(int x, int y, char text, ConsoleColor bgCol, ConsoleColor fgCol)
 			{
-				//if (x < 0 || x >= size.X || y < 0 || y >= size.Y)
-				//	return false;
+				if (x < 0 || x >= size.X || y < 0 || y >= size.Y)
+					return false;
 
 				bufferPos = y * size.X + x;
 				buffer[bufferPos].Char.UnicodeChar = text;
@@ -368,6 +368,32 @@ namespace ConsoleRender
 			[return: MarshalAs(UnmanagedType.Bool)]
 			[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
 			internal static extern bool GetCurrentConsoleFontEx(IntPtr hConsoleOutput, bool MaximumWindow, ref FontInfo ConsoleCurrentFontEx);
+		}
+
+	}
+
+	public class Camera
+	{
+		public static Camera main;
+		public Vector2 Position { get; set; }
+		public Vector2 Size { get; set; }
+		Vector2 limits;
+
+		public Camera(Vector2 position, Vector2 size, Vector2 canvasSize)
+		{
+			Position = position;
+			Size = size;
+			limits = canvasSize - size - Vector2.One;
+		}
+
+		public void MoveTo(Vector2 newPos)
+		{
+			Position = new Vector2(Mathf.Clamp(newPos.x, 0, limits.x), Mathf.Clamp(newPos.y, 0, limits.y));
+		}
+
+		public void Move(Vector2 deltaPos)
+		{
+			MoveTo(Position + deltaPos);
 		}
 
 	}
@@ -468,6 +494,10 @@ namespace ConsoleRender
 				pixels[i].Draw(newX, newY, flipX, flipY);
 			}
 		}
+		public void DrawSpriteToCamera(Camera cam, int x, int y, int flipX = 1, int flipY = 1)
+		{
+			DrawSprite(x - (int)cam.Position.x, y - (int)cam.Position.y, flipX, flipY);
+		}
 
 		public Sprite Colorize(ConsoleColor colourA, ConsoleColor colourB)
 		{
@@ -504,4 +534,5 @@ namespace ConsoleRender
 			}
 		}
 	}
+
 }

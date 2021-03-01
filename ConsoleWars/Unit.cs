@@ -42,6 +42,8 @@ namespace ConsoleWars
 		int fuel = 50;
 		int ammo = 20;
 
+		public int FlipX { get; set; } = 1;
+		public int FlipY { get; set; } = 1;
 		//Stat mods
 		float moveMod;
 		float damageMod;
@@ -124,13 +126,16 @@ namespace ConsoleWars
 			//Checks to see if new coords are within map boundaries
 			if (newX >= 0 && newX < parentSurface.ParentMap.Width && newY >= 0 && newY < parentSurface.ParentMap.Height)
 			{
+				Unit foundUnit = parentSurface.ParentMap.GetSurface(newX, newY).CurrentUnit;
 				//Prevents moving unit to an occupied surface
-				if (parentSurface.ParentMap.GetSurface(newX, newY) != null)
+				if (foundUnit == null)
 				{
 					//Assign parent surface to surface at newX, newY
 					SetParentSurface(parentSurface.ParentMap.GetSurface(newX, newY));
 					return true;
 				}
+				else if (foundUnit == this)
+					return true;
 			}
 
 			return false;
@@ -150,7 +155,7 @@ namespace ConsoleWars
 
 		public void Draw(int x, int y)
 		{
-			sprite.DrawAnimated(x, y, 1, 1);
+			sprite.DrawAnimated(x, y, FlipX, FlipY);
 		}
 
 	}

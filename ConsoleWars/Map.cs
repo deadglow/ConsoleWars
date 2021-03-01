@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleRender;
 
 namespace ConsoleWars
 {
@@ -51,25 +52,25 @@ namespace ConsoleWars
 			}
 		}
 
-		public void DrawRegion(Vector2 topLeft, Vector2 size)
+		public void DrawRegion(Vector2 position, Vector2 topLeft, Vector2 size)
 		{
 			if (topLeft.x >= Width || topLeft.y >= Height)
 				return;
 
-			//int yLim = (int)Math.Ceiling(Math.Min(Height + topLeft.y, size.y) - topLeft.y);
-			//int xLim = (int)Math.Ceiling(Math.Min(Width + topLeft.x, size.x) - topLeft.x);
+			Vector2 roundedTopLeft = new Vector2((int)topLeft.x, (int)topLeft.y);
+			
 
-			for (int y = 0; y < size.y; ++y)
+			for (int y = 0; y < Math.Min(size.y + 1, Height - roundedTopLeft.y); ++y)
 			{
-				for (int x = 0; x < size.x; ++x)
+				for (int x = 0; x < Math.Min(size.x + 1, Width - roundedTopLeft.x); ++x)
 				{
-					surfaces[(int)topLeft.x + x, (int)topLeft.y + y].Draw(x * TileSize, y * TileSize);
+					surfaces[(int)(roundedTopLeft.x + x), (int)(roundedTopLeft.y + y)].Draw((int)position.x + x * TileSize, (int)position.y + y * TileSize);
 				}
 			}
 		}
-		public void DrawRegion(int tlx, int tly, int rangeX, int rangeY)
+		public void DrawRegion(int posX, int posY, int tlx, int tly, int rangeX, int rangeY)
 		{
-			DrawRegion(new Vector2(tlx, tly), new Vector2(rangeX, rangeY));
+			DrawRegion(new Vector2(posX, posY), new Vector2(tlx, tly), new Vector2(rangeX, rangeY));
 		}
 		
 

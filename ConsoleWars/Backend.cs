@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleWars
+namespace ConsoleRender
 {
-	struct Vector2
+	public struct Vector2
 	{
 		public static Vector2 Zero
 		{
@@ -48,6 +48,10 @@ namespace ConsoleWars
 		{
 			return new Vector2(a.x * scalar, a.y * scalar);
 		}
+		public static Vector2 operator *(Vector2 a, double scalar)
+		{
+			return new Vector2(a.x * (float)scalar, a.y * (float)scalar);
+		}
 		public static Vector2 operator /(Vector2 a, float scalar)
 		{
 			if (scalar == 0)
@@ -55,22 +59,30 @@ namespace ConsoleWars
 
 			return new Vector2(a.x / scalar, a.y / scalar);
 		}
-	}
+		public static Vector2 operator %(Vector2 a, float scalar)
+		{
+			return new Vector2(a.x % scalar, a.y % scalar);
+		}
+		public static Vector2 operator -(Vector2 a)
+		{
+			return new Vector2(-a.x, -a.y);
+		}
 
-	enum Team
-	{
-		White,
-		Red,
-		Blue,
-		Green,
-		Purple
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		//			Methods
+		//______________________________________________________
+
+		public static Vector2 Lerp(Vector2 origin, Vector2 destination, float t)
+		{
+			return origin + (destination - origin) * t;
+		}
 	}
 
 	public partial class Mathf
 	{
 		public static float Clamp(float value, float min, float max)
 		{
-			return Math.Min(min, Math.Max(value, max));
+			return Math.Max(min, Math.Min(value, max));
 		}
 	}
 

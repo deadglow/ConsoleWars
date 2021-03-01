@@ -54,4 +54,13 @@ namespace ConsoleWars
 		}
 
 	}
+
+	enum Team
+	{
+		White,
+		Red,
+		Blue,
+		Green,
+		Purple
+	}
 }
