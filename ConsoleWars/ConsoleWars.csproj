@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Building.cs" />
     <Compile Include="Backend.cs" />
+    <Compile Include="Camera.cs" />
+    <Compile Include="ConsoleInput.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Program.cs" />

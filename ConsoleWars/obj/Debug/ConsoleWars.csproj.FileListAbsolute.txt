@@ -18,3 +18,9 @@ D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csprojAsse
 D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csproj.CoreCompileInputs.cache
 D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.exe
 D:\User Files\Dev\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.pdb
+C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe.config
+C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe
+C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.pdb
+C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csprojAssemblyReference.cache
+C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.exe
+C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.pdb

@@ -66,4 +66,12 @@ namespace ConsoleWars
 		Purple
 	}
 
+	public partial class Mathf
+	{
+		public static float Clamp(float value, float min, float max)
+		{
+			return Math.Min(min, Math.Max(value, max));
+		}
+	}
+
 }

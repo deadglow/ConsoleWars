@@ -9,7 +9,7 @@ namespace ConsoleWars
 {
 	class Surface : ICloneable
 	{
-		protected string name;
+		public string Name { get; }
 		protected bool canHide;
 		protected bool blockVision;
 		protected Unit.Locomotion moveTypes = Unit.Locomotion.All;
@@ -23,7 +23,7 @@ namespace ConsoleWars
 
 		public Surface(string name, AnimatedSprite animSprite, Map parentMap)
 		{
-			this.name = name;
+			Name = name;
 			AnimSprite = animSprite;
 			ParentMap = parentMap;
 		}

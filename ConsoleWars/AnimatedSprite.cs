@@ -9,19 +9,27 @@ namespace ConsoleWars
 {
 	class AnimatedSprite
 	{
+		public string Name { get; }
 		string[] spriteNames;
 		Sprite[] sprites;
 		public float Speed { get; set; }
 
 
-		public AnimatedSprite(string[] spriteNames)
+		public AnimatedSprite(string[] spriteNames, string name = "Animated Sprite")
 		{
+			Name = name;
 			this.spriteNames = spriteNames;
 			Initialise();
 		}
-		public AnimatedSprite(Sprite[] sprites)
+		public AnimatedSprite(Sprite[] sprites, string name = "Animated Sprite")
 		{
+			Name = name;
 			this.sprites = sprites;
+		}
+
+		public Sprite GetSprite(int index)
+		{
+			return sprites[index];
 		}
 
 		public void Initialise()

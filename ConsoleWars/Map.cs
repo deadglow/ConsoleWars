@@ -8,7 +8,7 @@ namespace ConsoleWars
 {
 	class Map
 	{
-		string name;
+		public string Name { get; }
 		public int Width { get; }
 		public int Height { get; }
 		Surface[,] surfaces;
@@ -19,8 +19,7 @@ namespace ConsoleWars
 			Width = width;
 			Height = height;
 			TileSize = tileSize;
-			this.name = name;
-			surfaces = new Surface[width, height];
+			Name = name;
 		}
 
 		//Getters
@@ -57,8 +56,8 @@ namespace ConsoleWars
 			if (topLeft.x >= Width || topLeft.y >= Height)
 				return;
 
-			int yLim = (int)Math.Ceiling(Math.Min(Height + topLeft.y, size.y) - topLeft.y);
-			int xLim = (int)Math.Ceiling(Math.Min(Width + topLeft.x, size.x) - topLeft.x);
+			//int yLim = (int)Math.Ceiling(Math.Min(Height + topLeft.y, size.y) - topLeft.y);
+			//int xLim = (int)Math.Ceiling(Math.Min(Width + topLeft.x, size.x) - topLeft.x);
 
 			for (int y = 0; y < size.y; ++y)
 			{

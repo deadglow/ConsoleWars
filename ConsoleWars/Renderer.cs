@@ -11,7 +11,7 @@ namespace ConsoleRender
 	{
 		private static SafeFileHandle fHandle;
 		private static ScreenBuffer mainSBuffer;
-		public static string MainSpriteDirectory { get; set; } = @"spr";
+		public static string MainSpriteDirectory { get; set; } = "spr";
 		public static int PixelWidth { get; set; }
 		public static int BufferWidth { get { return mainSBuffer.Size.X; } }
 		public static int BufferHeight { get { return mainSBuffer.Size.Y; } }
@@ -304,8 +304,8 @@ namespace ConsoleRender
 			//------------------------------------------------------------------------------------------------/
 			public bool SetPixel(int x, int y, char text, ConsoleColor bgCol, ConsoleColor fgCol)
 			{
-				if (x < 0 || x >= size.X || y < 0 || y >= size.Y)
-					return false;
+				//if (x < 0 || x >= size.X || y < 0 || y >= size.Y)
+				//	return false;
 
 				bufferPos = y * size.X + x;
 				buffer[bufferPos].Char.UnicodeChar = text;

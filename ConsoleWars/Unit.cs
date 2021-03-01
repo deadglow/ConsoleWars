@@ -11,12 +11,18 @@ namespace ConsoleWars
 	class Unit : ICloneable
 	{
 		private Surface parentSurface;
-		public Surface ParentSurface { get; }
+		public Surface ParentSurface
+		{
+			get
+			{
+				return parentSurface;
+			}
+		}
 
-		string name = "Unit";
+		public string Name { get; } = "Unit";
 		Team team = Team.White;
 
-		AnimatedSprite sprite;
+		public AnimatedSprite sprite;
 
 		float hp = 10;
 		float maxHp = 10;
@@ -45,7 +51,7 @@ namespace ConsoleWars
 
 		public Unit(string name, Surface parentSurface, AnimatedSprite sprite)
 		{
-			this.name = name;
+			this.Name = name;
 			this.parentSurface = parentSurface;
 			this.sprite = sprite;
 		}
@@ -107,9 +113,8 @@ namespace ConsoleWars
 			//Checks first to see if not null
 			if (parentSurface != null)
 				parentSurface.CurrentUnit = null;
-			//Fixes dependencies on parent/child
-			if (parentSurface.CurrentUnit == this)
-				newSurface.CurrentUnit = this;
+
+			newSurface.CurrentUnit = this;
 
 			parentSurface = newSurface;
 		}
