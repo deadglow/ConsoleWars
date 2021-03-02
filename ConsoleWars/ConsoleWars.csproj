@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building.cs" />
+    <Compile Include="GameUI.cs" />
     <Compile Include="Renderer\Backend.cs" />
     <Compile Include="ConsoleInput.cs" />
     <Compile Include="Manager.cs" />

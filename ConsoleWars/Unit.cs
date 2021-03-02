@@ -47,8 +47,8 @@ namespace ConsoleWars
 
 		public Unit(string name, Surface parentSurface, AnimatedSprite sprite)
 		{
-			this.Name = name;
-			this.ParentSurface = parentSurface;
+			Name = name;
+			ParentSurface = parentSurface;
 			this.sprite = sprite;
 		}
 
@@ -143,14 +143,14 @@ namespace ConsoleWars
 
 		public float GetDamageTaken(float damage, DamageType damageType)
 		{
-			return (damage - ParentSurface.Defence * resistances[(int)damageType] * (hp / maxHp) * resistances[(int)damageType]);
+			return damage * resistances[(int)damageType] * (1 - ParentSurface.Defence * 0.05f);
 		}
 
 		public float GetDamageDealt(bool counterAttack)
 		{
-			float dam = baseDamage  - (counterAttack ? 1 : 0) + ParentSurface.DamageBonus;
+			float dam = baseDamage * (1 - ParentSurface.DamageBonus * 0.05f) * (counterAttack ? 0.7f : 1);
 
-			return dam * hp / maxHp;
+			return dam * (0.5f + hp / maxHp * 0.5f);
 		}
 
 		public void Draw(int x, int y)

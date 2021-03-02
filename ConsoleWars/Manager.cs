@@ -16,6 +16,9 @@ namespace ConsoleWars
 		public static Unit[] unitList;
 		public static Surface[] surfaceList;
 
+		static Team currentTurn;
+		static int playerCount = 1;
+
 		public static void Init()
 		{
 

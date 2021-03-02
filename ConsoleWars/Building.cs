@@ -6,7 +6,7 @@ namespace ConsoleWars
 	class Building : Surface
 	{
 		Team team;
-		int capRequirement = 10;
+		int capRequirement = 20;
 		int currentCap = 0;
 		Team cappingTeam;
 		int resourcePerTurn;
