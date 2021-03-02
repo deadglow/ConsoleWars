@@ -13,6 +13,13 @@ namespace ConsoleWars
 	{
 		public static long elapsedTicks;
 		public static Dictionary<string, Unit> GlobalUnitList { get; } = new Dictionary<string, Unit>();
+		public static Unit[] unitList;
+		public static Surface[] surfaceList;
+
+		public static void Init()
+		{
+
+		}
 		
 		public static void Update()
 		{
