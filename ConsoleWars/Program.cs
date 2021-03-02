@@ -9,8 +9,11 @@ namespace ConsoleWars
 {
 	class Program
 	{
-		static Vector2 camSize = new Vector2(160, 144);
+		static Random random = new Random();
+		static Vector2 camSize = new Vector2(100, 100);
 		static Vector2 mapSize = new Vector2(32, 32);
+		static int pixelSize = 2;
+		static int tileSize = 8;
 		static Map mainMap;
 
 		static AnimatedSprite cursorSprite;
@@ -21,42 +24,92 @@ namespace ConsoleWars
 		static void Main(string[] args)
 		{
 			bool quit = false;
-
 			Console.CursorVisible = false;
 
-			Manager.Graphics.LoadSpritesFromFolder();
-			Manager.Graphics.GlobalSpriteList.Add("grass2.spr", Manager.Graphics.GlobalSpriteList["grass.spr"].Colorize(ConsoleColor.Green, ConsoleColor.Blue));
-
-			Manager.Graphics.GlobalAnimSpriteList.Add("grass", new AnimatedSprite(new string[] { "grass.spr" }));
-			Manager.Graphics.GlobalAnimSpriteList.Add("grass2", new AnimatedSprite(new string[] { "grass2.spr" }));
-			Manager.Graphics.GlobalAnimSpriteList.Add("infantry", new AnimatedSprite(new string[] { "infantry_1.spr", "infantry_1.spr", "infantry_2.spr", "infantry_1.spr"}));
+			Graphics.LoadSpritesFromFolder();
 
 
-			foreach (Sprite sprite in Manager.Graphics.GlobalSpriteList.Values)
+			Graphics.GlobalAnimSpriteList.Add("grass", new AnimatedSprite(new string[] { "grass.spr" }));
+			Graphics.GlobalAnimSpriteList.Add("red_infantry", new AnimatedSprite(new string[] { "infantry_1.spr", "infantry_1.spr", "infantry_2.spr", "infantry_1.spr"}));
+			Graphics.GlobalAnimSpriteList.Add("red_at_infantry", new AnimatedSprite(new string[] { "at_infantry_1.spr", "at_infantry_1.spr", "at_infantry_2.spr", "at_infantry_1.spr" }));
+			Graphics.GlobalAnimSpriteList.Add("red_tank", new AnimatedSprite(new string[] { "tank_1.spr", "tank_2.spr" }));
+			Graphics.GlobalAnimSpriteList.Add("cursor", new AnimatedSprite(new string[] { "cursor_1.spr", "cursor_1.spr", "cursor_2.spr" }));
+			Graphics.GlobalAnimSpriteList.Add("tree", new AnimatedSprite(new string[] { "tree_1.spr", "tree_1.spr", "tree_1.spr", "tree_1.spr", "tree_2.spr" }));
+			Graphics.GlobalAnimSpriteList["tree"].Speed = 0.1f;
+
+			Graphics.GlobalAnimSpriteList.Add("blue_infantry", Graphics.GlobalAnimSpriteList["red_infantry"].Colorize( "blue_infantry",
+			new KeyValuePair<ConsoleColor, ConsoleColor>(ConsoleColor.Red, ConsoleColor.Blue),
+			new KeyValuePair<ConsoleColor, ConsoleColor>(ConsoleColor.DarkRed, ConsoleColor.DarkBlue
+			)));
+			Graphics.GlobalAnimSpriteList.Add("blue_tank", Graphics.GlobalAnimSpriteList["red_tank"].Colorize("blue_tank",
+			new KeyValuePair<ConsoleColor, ConsoleColor>(ConsoleColor.Red, ConsoleColor.Blue),
+			new KeyValuePair<ConsoleColor, ConsoleColor>(ConsoleColor.DarkRed, ConsoleColor.DarkBlue
+			)));
+			Graphics.GlobalAnimSpriteList.Add("blue_at_infantry", Graphics.GlobalAnimSpriteList["red_at_infantry"].Colorize("blue_at_infantry",
+			new KeyValuePair<ConsoleColor, ConsoleColor>(ConsoleColor.Red, ConsoleColor.Blue),
+			new KeyValuePair<ConsoleColor, ConsoleColor>(ConsoleColor.DarkRed, ConsoleColor.DarkBlue
+			)));
+
+
+
+			foreach (Sprite sprite in Graphics.GlobalSpriteList.Values)
 			{
 				Console.WriteLine(sprite.Name);
 			}
 			Console.ReadKey();
 
 			mainMap = new Map((int)mapSize.x, (int)mapSize.y);
-			Surface grass = new Surface("Grass", Manager.Graphics.GlobalAnimSpriteList["grass"], mainMap);
-			Surface grass2 = new Surface("Grass2", Manager.Graphics.GlobalAnimSpriteList["grass2"], mainMap);
+			mainMap.TileSize = tileSize;
+			Surface[] surfaces = new Surface[]
+			{
+				new Surface("Grass", Graphics.GlobalAnimSpriteList["grass"], mainMap),
+				new Surface("Tree", Graphics.GlobalAnimSpriteList["tree"], mainMap)
+			};
 
-			mainMap.InitialiseMap(grass, grass2);
+			mainMap.InitialiseMap(surfaces);
 
-			Unit infantry = new Unit("Infantry", grass, Manager.Graphics.GlobalAnimSpriteList["infantry"]);
-			infantry.sprite.Speed = 0.5f;
+			//Units
+			Unit redInfantry = new Unit("Infantry", surfaces[0], Graphics.GlobalAnimSpriteList["red_infantry"]);
+			redInfantry.SpriteSpeed = 0.5f;
+			Unit blueInfantry = new Unit("Blue Infantry", surfaces[0], Graphics.GlobalAnimSpriteList["blue_infantry"]);
+			blueInfantry.SpriteSpeed = 0.3f;
+			Unit redTank = new Unit("Red Tank", surfaces[0], Graphics.GlobalAnimSpriteList["red_tank"]);
+			redTank.SpriteSpeed = 0.5f;
+			Unit blueTank = new Unit("Blue Tank", surfaces[0], Graphics.GlobalAnimSpriteList["blue_tank"]);
+			blueTank.SpriteSpeed = 0.5f;
+			Unit redAtInfantry = new Unit("Red AT", surfaces[0], Graphics.GlobalAnimSpriteList["red_at_infantry"]);
+			redAtInfantry.SpriteSpeed = 0.3f;
+			Unit blueAtInfantry = new Unit("Blue AT", surfaces[0], Graphics.GlobalAnimSpriteList["blue_at_infantry"]);
+			blueAtInfantry.SpriteSpeed = 0.3f;
 
-			infantry.Clone(mainMap.GetSurface(5, 7));
-			infantry.Clone(mainMap.GetSurface(9, 4));
-			infantry.Clone(mainMap.GetSurface(1, 1));
-			infantry.Clone(mainMap.GetSurface(3, 7));
+			Unit[] units = new Unit[]
+			{
+				redInfantry,
+				blueInfantry,
+				redTank,
+				blueTank,
+				redAtInfantry,
+				blueAtInfantry
+			};
 
-			Renderer.InitialiseRenderer((short)camSize.x, (short)camSize.y, 2, "Consolas", 6);
+			for (int i = 0; i < units.Length; ++i)
+			{
+				units[i].Clone(mainMap.GetSurface(i, i));
+			}
+
+			//for (int x = 0; x < mapSize.x; ++x)
+			//{
+			//	for (int y = 0; y < mapSize.y; ++y)
+			//	{
+			//		units[random.Next(0, units.Length)].Clone(mainMap.GetSurface(x, y));
+			//	}
+			//}
+
+			Renderer.InitialiseRenderer((short)camSize.x, (short)camSize.y, pixelSize, "Consolas", 6);
 
 			Camera.main = new Camera(Vector2.Zero, camSize, mapSize * mainMap.TileSize);
 
-			cursorSprite = new AnimatedSprite(new string[] { "cursor_1.spr", "cursor_1.spr", "cursor_2.spr" });
+			cursorSprite = Graphics.GlobalAnimSpriteList["cursor"];
 			cursorSprite.Speed = 0.5f;
 
 			while(!quit)
@@ -66,7 +119,7 @@ namespace ConsoleWars
 					System.Diagnostics.Stopwatch frameTimer = new System.Diagnostics.Stopwatch();
 					frameTimer.Start();
 
-					Camera.main.MoveTo(Vector2.Lerp(Camera.main.Position, curPos * mainMap.TileSize - camSize / 2 + Vector2.One * mainMap.TileSize / 2, 0.7f));
+					Camera.main.MoveTo(Vector2.Lerp(Camera.main.Position, curPos * mainMap.TileSize - camSize / 2 + Vector2.One * mainMap.TileSize / 2, 0.55f));
 
 					mainMap.DrawRegion(Camera.main.Position - (Camera.main.Position % mainMap.TileSize), Camera.main.Position / mainMap.TileSize, camSize / mainMap.TileSize);
 					
@@ -74,11 +127,8 @@ namespace ConsoleWars
 
 					if (selectedUnit != null)
 					{
-						cursorSprite.Draw(2, (int)selectedUnitPos.x * mainMap.TileSize, (int)selectedUnitPos.y * mainMap.TileSize, 1, 1);
+						cursorSprite.Draw(0, (int)selectedUnitPos.x * mainMap.TileSize, (int)selectedUnitPos.y * mainMap.TileSize, 1, 1);
 					}
-					
-
-
 
 					Manager.Update();
 
@@ -86,9 +136,10 @@ namespace ConsoleWars
 
 					System.Threading.Thread.Sleep((int)Mathf.Clamp((float)(1000.0 / 30.0) - frameTimer.ElapsedMilliseconds, 0, (float)(1000.0 / 30.0)));
 				}
-				int x = 0;
-				int y = 0;
-				switch (Console.ReadKey().Key)
+
+				int x = 0, y = 0;
+
+				switch (Console.ReadKey(true).Key)
 				{
 					case ConsoleKey.RightArrow:
 						++x;
@@ -109,7 +160,14 @@ namespace ConsoleWars
 					case ConsoleKey.Z:
 						if (selectedUnit != null)
 						{
-							if (selectedUnit.MoveUnit((int)curPos.x, (int)curPos.y))
+							if (selectedUnit.ParentSurface != null)
+							{
+								if (selectedUnit.MoveUnit((int)curPos.x, (int)curPos.y))
+								{
+									selectedUnit = null;
+								}
+							}
+							else
 							{
 								selectedUnit = null;
 							}
@@ -128,11 +186,26 @@ namespace ConsoleWars
 						}
 						break;
 
+					case ConsoleKey.A:
+						if (mainMap.GetSurface(curPos).CurrentUnit == null)
+						{
+							units[random.Next(0, units.Length)].Clone(mainMap.GetSurface(curPos));
+						}
+						break;
+
+					case ConsoleKey.F:
+						if (mainMap.GetSurface(curPos).CurrentUnit != null)
+						{
+							mainMap.GetSurface(curPos).CurrentUnit.Destroy();
+						}
+						break;
+
 					default:
 						break;
 				}
 
 				curPos += new Vector2(x, y);
+				curPos = new Vector2(Mathf.Clamp(curPos.x, 0, mapSize.x - 1), Mathf.Clamp(curPos.y, 0, mapSize.y - 1));
 				
 			}
 		}

@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using System.Collections.Generic;
-using ConsoleWars;
+using System.Threading.Tasks;
 
 namespace ConsoleRender
 {
@@ -20,7 +20,6 @@ namespace ConsoleRender
 		private static readonly IntPtr ConsoleOutputHandle = External.GetStdHandle(StandardOutputHandle);
 
 
-
 		//------------------------------------------------
 		//		DLL Structs
 		//______________________________________________/
@@ -34,6 +33,11 @@ namespace ConsoleRender
 			{
 				X = x;
 				Y = y;
+			}
+
+			public static Coord operator /(Coord a, int scalar)
+			{
+				return new Coord((short)(a.X / scalar), (short)(a.Y / scalar));
 			}
 		}
 
@@ -135,7 +139,7 @@ namespace ConsoleRender
 		//------------------------------------------------------------------------------------------------/
 		public static void Render(ScreenBuffer sBuffer, bool clearBuffer = true)
 		{
-			External.WriteConsoleOutput(fHandle, sBuffer.GetBuffer(), sBuffer.Size, new Coord(0, 0), ref sBuffer.rect);
+			RenderRegion(sBuffer, sBuffer.Size, new Coord(0, 0));
 
 			if (clearBuffer)
 				sBuffer.Clear();
@@ -143,6 +147,28 @@ namespace ConsoleRender
 		public static void Render(bool clearBuffer = true)
 		{
 			Render(mainSBuffer, clearBuffer);
+		}
+
+		//Use this
+		public static void RenderRegion(ScreenBuffer sBuffer, Coord regionSize, Coord regionCoord)
+		{
+			SmallRect newRect = new SmallRect(regionCoord.X, regionCoord.Y, (short)(regionSize.X + regionCoord.X), (short)(regionSize.Y + regionCoord.Y));
+
+			External.WriteConsoleOutput(fHandle, sBuffer.GetBuffer(), regionSize, regionCoord, ref newRect);
+		}
+
+		//dont use this itll make you sad
+		public static void RenderParallel(ScreenBuffer sBuffer, int threads)
+		{
+			Parallel.For(0, threads,
+				index =>
+				{
+					Coord height = new Coord(sBuffer.Size.X, (short)(sBuffer.Size.Y / threads * (index + 1)));
+
+					Coord regionCoord = new Coord(0, (short)(sBuffer.Size.Y / threads * index));
+
+					RenderRegion(sBuffer, height, regionCoord);
+				});
 		}
 
 		//Sets font by name and size, https://stackoverflow.com/questions/52356843/setcurrentconsolefontex-isnt-working-for-long-font-names
@@ -369,170 +395,5 @@ namespace ConsoleRender
 			[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
 			internal static extern bool GetCurrentConsoleFontEx(IntPtr hConsoleOutput, bool MaximumWindow, ref FontInfo ConsoleCurrentFontEx);
 		}
-
 	}
-
-	public class Camera
-	{
-		public static Camera main;
-		public Vector2 Position { get; set; }
-		public Vector2 Size { get; set; }
-		Vector2 limits;
-
-		public Camera(Vector2 position, Vector2 size, Vector2 canvasSize)
-		{
-			Position = position;
-			Size = size;
-			limits = canvasSize - size - Vector2.One;
-		}
-
-		public void MoveTo(Vector2 newPos)
-		{
-			Position = new Vector2(Mathf.Clamp(newPos.x, 0, limits.x), Mathf.Clamp(newPos.y, 0, limits.y));
-		}
-
-		public void Move(Vector2 deltaPos)
-		{
-			MoveTo(Position + deltaPos);
-		}
-
-	}
-
-
-	public class Sprite
-	{
-		public string Name { get; }
-		public string FileName { get; }
-		private Pixel[] pixels;
-		private int width;
-		private int height;
-		public int Width { get { return width; } }
-		public int Height { get { return height; } }
-
-
-		public Sprite(Pixel[] pixels, string fileName, string name = "Sprite")
-		{
-			Name = name;
-			FileName = fileName;
-			this.pixels = pixels;
-		}
-		public Sprite(string fileName, string name)
-		{
-			Name = name;
-			FileName = fileName;
-		}
-		public Sprite(string fileName)
-		{
-			FileName = fileName;
-			Name = fileName;
-		}
-
-		public Sprite Clone()
-		{
-			Sprite newSprite = (Sprite)MemberwiseClone();
-			newSprite.pixels = (Pixel[])pixels.Clone();
-
-			return newSprite;
-		}
-
-		public void ConvertTextToSprite(string text)
-		{
-			//Split text into rows
-			string[] textRows = text.Split('\n');
-
-			List<Pixel> newPixels = new List<Pixel>();
-
-			for (int y = 0; y < textRows.Length; ++y)
-			{
-				//Split into columns
-				string[] splitText = textRows[y].Split(' ');
-				
-				for (int x = 0; x < splitText.Length; ++x)
-				{
-					//Ignore if value given isn't an integer
-					if (int.TryParse(splitText[x], out int returnedIndex))
-					{
-						//Run number below 1, since 0 index in file is 'transparent' and should be -1
-						returnedIndex--;
-
-						//Ignore 'transparent' pixels
-						if (returnedIndex < 0)
-							continue;
-
-						//Updates height/width
-						if (x >= width)
-							width = x + 1;
-						if (y >= height)
-							height = y + 1;
-
-						newPixels.Add(new Pixel(x, y, ' ', (ConsoleColor)returnedIndex, ConsoleColor.White));
-					}
-				}
-			}
-
-			pixels = newPixels.ToArray();
-		}
-		public void LoadSpriteFromFile(string directory)
-		{
-			string newText = File.ReadAllText(Path.Combine(directory, FileName));
-			ConvertTextToSprite(newText);
-		}
-		public void LoadSpriteFromFile()
-		{
-			LoadSpriteFromFile(Renderer.MainSpriteDirectory);
-		}
-
-
-		public void DrawSprite(int x, int y, int flipX = 1, int flipY = 1)
-		{
-			//Changes drawing corner if flipped
-			int newX = x + (width - 1) * ((-flipX + 1) / 2);
-			int newY = y + (height - 1) * ((-flipY + 1) / 2);
-
-			for (int i = 0; i < pixels.Length; ++i)
-			{
-				pixels[i].Draw(newX, newY, flipX, flipY);
-			}
-		}
-		public void DrawSpriteToCamera(Camera cam, int x, int y, int flipX = 1, int flipY = 1)
-		{
-			DrawSprite(x - (int)cam.Position.x, y - (int)cam.Position.y, flipX, flipY);
-		}
-
-		public Sprite Colorize(ConsoleColor colourA, ConsoleColor colourB)
-		{
-			Sprite newSprite = Clone();
-			for (int i = 0; i < newSprite.pixels.Length; ++i)
-			{
-				if (newSprite.pixels[i].bgCol == colourA)
-					newSprite.pixels[i].bgCol = colourB;
-			}
-			return newSprite;
-		}
-
-		public struct Pixel
-		{
-			int x;
-			int y;
-			char text;
-			public ConsoleColor bgCol { get; set; }
-			public ConsoleColor fgCol { get; set; }
-
-			public Pixel(int x, int y, char text, ConsoleColor bgCol, ConsoleColor fgCol)
-			{
-				this.x = x;
-				this.y = y;
-				this.text = text;
-				this.bgCol = bgCol;
-				this.fgCol = fgCol;
-			}
-
-			public void Draw(int xOffset, int yOffset, int flipX, int flipY)
-			{
-				//Draw backwards if flipped on each axis
-				Renderer.DrawPixel(xOffset + x * flipX, yOffset + y * flipY, text, bgCol, fgCol);
-			}
-		}
-	}
-
 }

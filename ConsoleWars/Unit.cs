@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleRender;
 
 namespace ConsoleWars
 {
@@ -10,20 +11,13 @@ namespace ConsoleWars
 
 	class Unit : ICloneable
 	{
-		private Surface parentSurface;
-		public Surface ParentSurface
-		{
-			get
-			{
-				return parentSurface;
-			}
-		}
+		public Surface ParentSurface { get; private set; }
 
 		public string Name { get; } = "Unit";
 		Team team = Team.White;
 
 		public AnimatedSprite sprite;
-
+		public float SpriteSpeed { get; set; } = 1f;
 		float hp = 10;
 		float maxHp = 10;
 		DamageType damageType;
@@ -54,7 +48,7 @@ namespace ConsoleWars
 		public Unit(string name, Surface parentSurface, AnimatedSprite sprite)
 		{
 			this.Name = name;
-			this.parentSurface = parentSurface;
+			this.ParentSurface = parentSurface;
 			this.sprite = sprite;
 		}
 
@@ -69,6 +63,11 @@ namespace ConsoleWars
 		public object Clone()
 		{
 			return Clone(null);
+		}
+
+		public void Destroy()
+		{
+			SetParentSurface(null);
 		}
 
 
@@ -113,25 +112,26 @@ namespace ConsoleWars
 		public void SetParentSurface(Surface newSurface)
 		{
 			//Checks first to see if not null
-			if (parentSurface != null)
-				parentSurface.CurrentUnit = null;
+			if (ParentSurface != null)
+				ParentSurface.CurrentUnit = null;
 
-			newSurface.CurrentUnit = this;
+			if (newSurface != null)
+				newSurface.CurrentUnit = this;
 
-			parentSurface = newSurface;
+			ParentSurface = newSurface;
 		}
 
 		public bool MoveUnit(int newX, int newY)
 		{
 			//Checks to see if new coords are within map boundaries
-			if (newX >= 0 && newX < parentSurface.ParentMap.Width && newY >= 0 && newY < parentSurface.ParentMap.Height)
+			if (newX >= 0 && newX < ParentSurface.ParentMap.Width && newY >= 0 && newY < ParentSurface.ParentMap.Height)
 			{
-				Unit foundUnit = parentSurface.ParentMap.GetSurface(newX, newY).CurrentUnit;
+				Unit foundUnit = ParentSurface.ParentMap.GetSurface(newX, newY).CurrentUnit;
 				//Prevents moving unit to an occupied surface
 				if (foundUnit == null)
 				{
 					//Assign parent surface to surface at newX, newY
-					SetParentSurface(parentSurface.ParentMap.GetSurface(newX, newY));
+					SetParentSurface(ParentSurface.ParentMap.GetSurface(newX, newY));
 					return true;
 				}
 				else if (foundUnit == this)
@@ -143,19 +143,19 @@ namespace ConsoleWars
 
 		public float GetDamageTaken(float damage, DamageType damageType)
 		{
-			return (damage - parentSurface.Defence * resistances[(int)damageType] * (hp / maxHp) * resistances[(int)damageType]);
+			return (damage - ParentSurface.Defence * resistances[(int)damageType] * (hp / maxHp) * resistances[(int)damageType]);
 		}
 
 		public float GetDamageDealt(bool counterAttack)
 		{
-			float dam = baseDamage  - (counterAttack ? 1 : 0) + parentSurface.DamageBonus;
+			float dam = baseDamage  - (counterAttack ? 1 : 0) + ParentSurface.DamageBonus;
 
 			return dam * hp / maxHp;
 		}
 
 		public void Draw(int x, int y)
 		{
-			sprite.DrawAnimated(x, y, FlipX, FlipY);
+			sprite.DrawAnimated(x, y, FlipX, FlipY, SpriteSpeed);
 		}
 
 	}
