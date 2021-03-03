@@ -9,6 +9,6 @@ namespace ConsoleWars
 {
 	class GameUI
 	{
-		public Sprite 
+		
 	}
 }

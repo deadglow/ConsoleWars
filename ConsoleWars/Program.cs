@@ -64,6 +64,7 @@ namespace ConsoleWars
 				new Surface("Tree", Graphics.GlobalAnimSpriteList["tree"], mainMap)
 			};
 
+			#region unit loading
 			//Units
 			Unit redInfantry = new Unit("Infantry", null, Graphics.GlobalAnimSpriteList["red_infantry"]);
 			redInfantry.SpriteSpeed = 0.5f;
@@ -77,6 +78,7 @@ namespace ConsoleWars
 			redAtInfantry.SpriteSpeed = 0.3f;
 			Unit blueAtInfantry = new Unit("Blue AT", null, Graphics.GlobalAnimSpriteList["blue_at_infantry"]);
 			blueAtInfantry.SpriteSpeed = 0.3f;
+			#endregion
 
 			Manager.unitList = new Unit[]
 			{

@@ -55,6 +55,7 @@
     <Compile Include="Renderer\Graphics.cs" />
     <Compile Include="Renderer\Renderer.cs" />
     <Compile Include="Renderer\Sprite.cs" />
+    <Compile Include="RouteArrow.cs" />
     <Compile Include="Surface.cs" />
     <Compile Include="Renderer\AnimatedSprite.cs" />
     <Compile Include="Unit.cs" />
