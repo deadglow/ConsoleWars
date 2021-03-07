@@ -24,3 +24,10 @@ C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.pdb
 C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csprojAssemblyReference.cache
 C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.exe
 C:\Users\s210694\Desktop\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.pdb
+C:\Users\999bo\OneDrive\Documents\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe.config
+C:\Users\999bo\OneDrive\Documents\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.exe
+C:\Users\999bo\OneDrive\Documents\repos\ConsoleWars\ConsoleWars\bin\Debug\ConsoleWars.pdb
+C:\Users\999bo\OneDrive\Documents\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csprojAssemblyReference.cache
+C:\Users\999bo\OneDrive\Documents\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.csproj.CoreCompileInputs.cache
+C:\Users\999bo\OneDrive\Documents\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.exe
+C:\Users\999bo\OneDrive\Documents\repos\ConsoleWars\ConsoleWars\obj\Debug\ConsoleWars.pdb

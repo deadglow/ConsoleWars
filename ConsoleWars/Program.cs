@@ -22,6 +22,8 @@ namespace ConsoleWars
 		static Vector2 curPos;
 		static Unit selectedUnit;
 		static Vector2 selectedUnitPos;
+		static RouteArrow unitRoute = new RouteArrow();
+		static bool unitRouteActive = false;
 		
 		static void Main(string[] args)
 		{
@@ -90,6 +92,7 @@ namespace ConsoleWars
 				blueAtInfantry
 			};
 
+			unitRoute.InitSprites();
 			mainMap.InitialiseMap(Manager.surfaceList);
 
 			for (int i = 0; i < Manager.unitList.Length; ++i)
@@ -116,7 +119,10 @@ namespace ConsoleWars
 
 					//Draws main map to region based on camera position
 					mainMap.DrawRegion(Camera.main.Position - (Camera.main.Position % mainMap.TileSize), Camera.main.Position / mainMap.TileSize, camSize / mainMap.TileSize);
-					
+
+					if (unitRouteActive)
+						unitRoute.DrawArrow();
+
 					cursorSprite.DrawAnimated(curPos * mainMap.TileSize, 1, 1);
 
 					if (selectedUnit != null)
@@ -154,22 +160,21 @@ namespace ConsoleWars
 					case ConsoleKey.Z:
 						if (selectedUnit != null)
 						{
-							if (selectedUnit.ParentSurface != null)
-							{
-								if (selectedUnit.MoveUnit((int)curPos.x, (int)curPos.y))
-								{
-									selectedUnit = null;
-								}
-							}
-							else
+							if (selectedUnit.MoveUnit((int)curPos.x, (int)curPos.y))
 							{
 								selectedUnit = null;
+								unitRouteActive = false;
 							}
 						}
 						else
 						{
 							selectedUnit = mainMap.GetSurface(curPos).CurrentUnit;
 							selectedUnitPos = curPos;
+							if (selectedUnit != null)
+                            {
+								unitRouteActive = true;
+								unitRoute.SetStart(curPos);
+                            }
 						}
 						break;
 
@@ -198,7 +203,12 @@ namespace ConsoleWars
 						break;
 				}
 
-				curPos += new Vector2(x, y);
+				Vector2 delta = new Vector2(x, y);
+
+				curPos += delta;
+				if (unitRouteActive)
+					unitRoute.AddPoint(delta);
+
 				curPos = new Vector2(Mathf.Clamp(curPos.x, 0, mapSize.x - 1), Mathf.Clamp(curPos.y, 0, mapSize.y - 1));
 				
 			}
