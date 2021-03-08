@@ -157,6 +157,8 @@ namespace ConsoleWars
 		{
 			sprite.DrawAnimated(x, y, FlipX, FlipY, SpriteSpeed);
 		}
+		
+
 
 	}
 }

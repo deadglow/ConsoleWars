@@ -92,7 +92,8 @@ namespace ConsoleWars
 				blueAtInfantry
 			};
 
-			unitRoute.InitSprites();
+			RouteArrow.InitialiseArrowSprite();
+			unitRoute.Initialise();
 			mainMap.InitialiseMap(Manager.surfaceList);
 
 			for (int i = 0; i < Manager.unitList.Length; ++i)
