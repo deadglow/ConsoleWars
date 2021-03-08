@@ -9,6 +9,10 @@ namespace ConsoleWars
 {
 	class RouteArrow
 	{
+		/*	Reference
+		 * 5 = L, 6 = ⅃, 7 = ⅂, 8 = Γ, 9 = -, 10 = |, 11 = >, 12 = ^, 13 = <, 14 = V
+		 * 
+		 */
 		int[,] spriteIndex =
 		{
 			{0, 11, 12, 13, 14 },
@@ -25,7 +29,6 @@ namespace ConsoleWars
 
 		public enum Direction
 		{
-			None = 0,
 			East = 1,
 			North = 2,
 			West = 3,
@@ -47,30 +50,30 @@ namespace ConsoleWars
 
 		public void AddPoint(Direction dir)
 		{
-			if (dir == Direction.None)
-				return;
-
 			if (points.Count > 0)
 			{
-				if (points.Last() != Direction.None && Math.Abs((int)dir - (int)points.Last()) == 2)
+				if (Math.Abs((int)dir - (int)points.Last()) == 2)
 					points.RemoveAt(points.Count - 1);
 				else
 					points.Add(dir);
 			}
+			else
+				points.Add(dir);
 		}
 		public void AddPoint(Vector2 delta)
 		{
 			int newDir = 0;
 			if (delta.x != 0)
 			{
-				newDir = 2 + Math.Sign(-delta.x);
+				newDir = 2 - Math.Sign(delta.x);
 			}
 			if (delta.y != 0)
 			{
-				newDir = 3 + Math.Sign(-delta.y);
+				newDir = 3 + Math.Sign(delta.y);
 			}
 
-			AddPoint((Direction)newDir);
+			if (newDir > 0)
+				AddPoint((Direction)newDir);
 		}
 
 		public void Clear()
@@ -82,40 +85,55 @@ namespace ConsoleWars
 		{
 			StartPos = pos;
 			Clear();
-			points.Add(Direction.None);
 		}
 
 		public void DrawArrow()
 		{
+			if (points.Count < 1)
+				return;
+
 			int x = 0;
 			int y = 0;
-			for (int i = 1; i < points.Count; ++i)
+			for (int i = 0; i <= points.Count; ++i)
 			{
-				switch (points[i])
+				Vector2 newPos = StartPos * TileSize + new Vector2(x, y) * TileSize;
+
+				if (i == points.Count)
 				{
-					case Direction.East:
-						x++;
-						break;
-					case Direction.West:
-						x--;
-						break;
-					case Direction.North:
-						y++;
-						break;
-					case Direction.South:
-						y--;
-						break;
-					default:
-						break;
+					sprite.Draw(spriteIndex[(int)points[i - 1], 0] - 1, (int)newPos.x, (int)newPos.y, 1, 1);
 				}
-
-
-				if (points[i] != Direction.None)
+				else
 				{
-					Vector2 newPos = StartPos * TileSize + new Vector2(x, y) * TileSize;
-					int index = spriteIndex[(int)points[i], (int)points[i - 1]];
+					int oldDir = 0;
+					if (i != 0)
+						oldDir = (int)points[i - 1];
+
+					int index = spriteIndex[oldDir, (int)points[i]];
+
+					if (i == 0 && index > 10)
+						index -= 10;
+
+					
 					if (index != 0)
 						sprite.Draw(index - 1, (int)newPos.x, (int)newPos.y, 1, 1);
+
+					switch (points[i])
+					{
+						case Direction.East:
+							x++;
+							break;
+						case Direction.West:
+							x--;
+							break;
+						case Direction.North:
+							y--;
+							break;
+						case Direction.South:
+							y++;
+							break;
+						default:
+							break;
+					}
 				}
 			}
 		}
