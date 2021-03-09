@@ -75,18 +75,7 @@ namespace ConsoleWars
 		}
 		public void AddPoint(Vector2 delta)
 		{
-			//Assuming 0-4 represent east north west south
-			//Offset rotation based on change in x or y. Y takes precedence
-			//Wont add a point if no direction is given
-			int newDir = 0;
-			if (delta.x != 0)
-			{
-				newDir = 2 - Math.Sign(delta.x);
-			}
-			if (delta.y != 0)
-			{
-				newDir = 3 + Math.Sign(delta.y);
-			}
+			int newDir = Manager.VecToDir(delta) + 1;
 
 			if (newDir > 0)
 				AddPoint((Direction)newDir);
@@ -149,23 +138,7 @@ namespace ConsoleWars
 						sprite.Draw(index - 1, (int)newPos.x, (int)newPos.y, 1, 1);
 
 					//Change x and y based on dir
-					switch (points[i])
-					{
-						case Direction.East:
-							pos.x++;
-							break;
-						case Direction.West:
-							pos.x--;
-							break;
-						case Direction.North:
-							pos.y--;
-							break;
-						case Direction.South:
-							pos.y++;
-							break;
-						default:
-							break;
-					}
+					pos += Manager.DirToVec((int)points[i] - 1);
 				}
 			}
 		}

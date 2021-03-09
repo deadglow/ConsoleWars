@@ -24,6 +24,10 @@ namespace ConsoleWars
 		static Vector2 selectedUnitPos;
 		static RouteArrow unitRoute = new RouteArrow();
 		static bool unitRouteActive = false;
+
+		static bool unitMoving = false;
+		static float unitMoveSpeed = 5;
+
 		
 		static void Main(string[] args)
 		{
@@ -62,8 +66,8 @@ namespace ConsoleWars
 
 			Manager.surfaceList = new Surface[]
 			{
-				new Surface("Grass", Graphics.GlobalAnimSpriteList["grass"], mainMap),
-				new Surface("Tree", Graphics.GlobalAnimSpriteList["tree"], mainMap)
+				new Surface("Grass", Vector2.Zero, Graphics.GlobalAnimSpriteList["grass"], mainMap),
+				new Surface("Tree", Vector2.Zero, Graphics.GlobalAnimSpriteList["tree"], mainMap)
 			};
 
 			#region unit loading
@@ -161,7 +165,7 @@ namespace ConsoleWars
 					case ConsoleKey.Z:
 						if (selectedUnit != null)
 						{
-							if (selectedUnit.MoveUnit((int)curPos.x, (int)curPos.y))
+							if (selectedUnit.MoveUnitToSurface((int)curPos.x, (int)curPos.y))
 							{
 								selectedUnit = null;
 								unitRouteActive = false;
@@ -204,14 +208,14 @@ namespace ConsoleWars
 						break;
 				}
 
-				Vector2 delta = new Vector2(x, y);
-
-				curPos += delta;
-				if (unitRouteActive)
-					unitRoute.AddPoint(delta);
-
-				curPos = new Vector2(Mathf.Clamp(curPos.x, 0, mapSize.x - 1), Mathf.Clamp(curPos.y, 0, mapSize.y - 1));
+				Vector2 prevCur = curPos;
+				curPos += new Vector2(x, y);
 				
+				curPos = new Vector2(Mathf.Clamp(curPos.x, 0, mapSize.x - 1), Mathf.Clamp(curPos.y, 0, mapSize.y - 1));
+
+				if (unitRouteActive)
+					unitRoute.AddPoint(curPos - prevCur);
+
 			}
 		}
 	}

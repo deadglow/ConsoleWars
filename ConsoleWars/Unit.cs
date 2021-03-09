@@ -7,14 +7,14 @@ using ConsoleRender;
 
 namespace ConsoleWars
 {
-
-
 	class Unit : ICloneable
 	{
 		public Surface ParentSurface { get; private set; }
 
 		public string Name { get; } = "Unit";
 		Team team = Team.White;
+
+		public Vector2 position = new Vector2();
 
 		public AnimatedSprite sprite;
 		public float SpriteSpeed { get; set; } = 1f;
@@ -27,7 +27,7 @@ namespace ConsoleWars
 		float baseDamage = 1;
 		//Movement
 		Locomotion locomotion = Locomotion.None;
-		int moveDistance = 5;
+		public int MoveDistance { get; set; } = 5;
 		int vision = 2;
 		int minAttackRange = 1;
 		int maxAttackRange;
@@ -116,12 +116,15 @@ namespace ConsoleWars
 				ParentSurface.CurrentUnit = null;
 
 			if (newSurface != null)
+			{
 				newSurface.CurrentUnit = this;
+				position = newSurface.position * newSurface.ParentMap.TileSize;
+			}
 
 			ParentSurface = newSurface;
 		}
 
-		public bool MoveUnit(int newX, int newY)
+		public bool MoveUnitToSurface(int newX, int newY)
 		{
 			//Checks to see if new coords are within map boundaries
 			if (newX >= 0 && newX < ParentSurface.ParentMap.Width && newY >= 0 && newY < ParentSurface.ParentMap.Height)
@@ -132,6 +135,7 @@ namespace ConsoleWars
 				{
 					//Assign parent surface to surface at newX, newY
 					SetParentSurface(ParentSurface.ParentMap.GetSurface(newX, newY));
+
 					return true;
 				}
 				else if (foundUnit == this)
@@ -153,12 +157,11 @@ namespace ConsoleWars
 			return dam * (0.5f + hp / maxHp * 0.5f);
 		}
 
-		public void Draw(int x, int y)
+		public void Draw()
 		{
-			sprite.DrawAnimated(x, y, FlipX, FlipY, SpriteSpeed);
+			sprite.DrawAnimated(position, FlipX, FlipY, SpriteSpeed);
 		}
-		
-
-
 	}
+
+	
 }

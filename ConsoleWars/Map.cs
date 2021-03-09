@@ -47,7 +47,7 @@ namespace ConsoleWars
 			{
 				for (int j = 0; j < surfaces.GetLength(1); ++j)
 				{
-					surfaces[i, j] = (Surface)fill[rand.Next(0, fill.Length)].Clone();
+					surfaces[i, j] = (Surface)fill[rand.Next(0, fill.Length)].Clone(new Vector2(i, j));
 				}
 			}
 		}

@@ -23,8 +23,8 @@ namespace ConsoleRender
 			}
 		}
 
-		public float x { get; set; }
-		public float y { get; set; }
+		public float x;
+		public float y;
 
 		public Vector2(float x, float y)
 		{

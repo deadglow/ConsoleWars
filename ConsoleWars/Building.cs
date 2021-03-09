@@ -11,7 +11,7 @@ namespace ConsoleWars
 		Team cappingTeam;
 		int resourcePerTurn;
 
-		public Building(string name, AnimatedSprite animSprite, Map parentMap) : base(name, animSprite, parentMap)
+		public Building(string name, Vector2 position, AnimatedSprite animSprite, Map parentMap) : base(name, position, animSprite, parentMap)
 		{
 		}
 

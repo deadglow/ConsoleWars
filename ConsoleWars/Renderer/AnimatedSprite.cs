@@ -75,6 +75,10 @@ namespace ConsoleRender
 		{
 			Draw((int)Math.Floor((Manager.elapsedTicks * speed + FrameOffset) % sprites.Length), x, y, flipX, flipY);
 		}
+		public void DrawAnimated(Vector2 pos, int flipX, int flipY, float speed)
+		{
+			DrawAnimated((int)pos.x, (int)pos.y, flipX, flipY, speed);
+		}
 		public void DrawAnimated(int x, int y, int flipX, int flipY)
 		{
 			DrawAnimated(x, y, flipX, flipY, Speed);
